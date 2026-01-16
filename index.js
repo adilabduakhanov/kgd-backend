@@ -32,14 +32,16 @@ app.post("/api/check", async (req, res) => {
     );
 
     res.json(response.data);
-  } catch (error) {
-    console.error(error?.response?.data || error.message);
-    res.status(500).json({
-      error: "KGD request failed"
-    });
-  }
-});
+} catch (error) {
+  const status = error?.response?.status || 500;
+  const data = error?.response?.data || error.message;
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
+  console.error("KGD ERROR:", status, data);
+
+  res.status(status).json({
+    error: "KGD request failed",
+    status,
+    kgd: data
+  });
+}
+
