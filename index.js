@@ -34,14 +34,19 @@ app.post("/api/check", async (req, res) => {
     res.json(response.data);
 } catch (error) {
   const status = error?.response?.status || 500;
+  const headers = error?.response?.headers || null;
   const data = error?.response?.data || error.message;
 
-  console.error("KGD ERROR:", status, data);
+  console.error("KGD ERROR STATUS:", status);
+  console.error("KGD ERROR DATA:", data);
 
   res.status(status).json({
     error: "KGD request failed",
     status,
-    kgd: data
+    kgd: data,
+    // headers можно убрать, если не нужно
+    // headers
   });
 }
+
 
